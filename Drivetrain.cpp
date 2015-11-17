@@ -14,13 +14,16 @@ Drivetrain::Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, fl
 	_trackWidth = trackWidth;
 	_wheelDia = wheelDia;
 	_speedConversion = 19.1/wheelDia/gearRatio; //19.099 = 60/pi //#TODO Check this number
-	_turnConversion = _gearRatio*_wheelDia/_trackWidth*180;
+	_turnConversion = _gearRatio*_wheelDia*3.1415;
 }
 
 /**
  * Assumes that the motors have been initialized
  **/
 void Drivetrain::initialize() {
+	xPos = 0;
+	yPos = 0;
+	_theta = 0;
 }
 
 /**
@@ -36,19 +39,14 @@ void Drivetrain::drive(float velocity, float turnVelocity) {
 	//Serial.println(V_l*_speedConversion);
 	_rightMotor->setRPM(V_r*_speedConversion);
 	_leftMotor->setRPM(V_l*_speedConversion);
-	currTime = millis();
-	currAngle = getOrientOdoEst()*3.1415/180.0;
-	xPos+=prevVel*sin(currAngle)*(currTime-prevTime)/1000.0;
-	yPos+=prevVel*cos(currAngle)*(currTime-prevTime)/1000.0;
-	prevVel = velocity;
-	prevTime = currTime;
+	updateRobotPos();
 }
 
-float Drivetrain::getXOdoEst() {
+double Drivetrain::getXOdoEst() {
 	return xPos;
 }
 
-float Drivetrain::getYOdoEst() {
+double Drivetrain::getYOdoEst() {
 	return yPos;
 }
 
@@ -56,13 +54,7 @@ float Drivetrain::getYOdoEst() {
  * Assumes that the robot is facing along the +y axis when turned on
  * @return float theta Deviation from the +y axis, +/- 180deg
  **/
-float Drivetrain::getOrientOdoEst() {
-	_theta = (_leftMotor->getRevolutions()-_rightMotor->getRevolutions())*_turnConversion;
-	//Serial.println(_leftMotor->getRevolutions());
-	//Serial.println(_rightMotor->getRevolutions());
-	Serial.println(_theta);
-	//Serial.println(_leftMotor->getRevolutions()-_rightMotor->getRevolutions());
-	// constrains output to be +/- 180, robot is facing in the +y-direction at the beginning
+double Drivetrain::getOrientOdoEst() {
 	while (_theta >= 360) {
 		_theta-=360;
 	}
@@ -75,4 +67,25 @@ float Drivetrain::getOrientOdoEst() {
 		_theta += 360;
 	}
 	return _theta; 
+}
+
+/**
+ * Updates the odometry estimates for the robot's x and y positions
+ **/
+void Drivetrain::updateRobotPos() {
+	currAngle = getOrientOdoEst()*3.1415/180.0;
+
+	currLeft = _leftMotor->getRevolutions();
+	currRight = _rightMotor->getRevolutions();
+
+	leftDelta = currLeft-prevLeft;
+	rightDelta = currRight-prevRight;
+	robotDelta = (leftDelta+rightDelta)/2*_turnConversion;
+
+	xPos+=robotDelta*sin(currAngle);
+	yPos+=robotDelta*cos(currAngle);
+	_theta=atan((currLeft-currRight)*_turnConversion/_trackWidth)*180/3.1415;
+
+	prevLeft = currLeft;
+	prevRight = currRight;
 }
