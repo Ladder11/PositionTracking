@@ -14,7 +14,8 @@ public:
 private:
   RegulatedMotor* _leftMotor;
   RegulatedMotor* _rightMotor;
-  float _speedConversion, _gearRatio, _trackWidth, V_r, V_l, _theta, _wheelDia;
+  long currTime, prevTime;
+  float _speedConversion, _gearRatio, _trackWidth, V_r, V_l, _wheelDia, _theta, xPos, yPos, prevVel, currAngle, _turnConversion;
 };
 
 

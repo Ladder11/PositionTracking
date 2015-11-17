@@ -31,7 +31,14 @@ void setup() {
 }
 
 void loop() {
-  //Serial.println(drivetrain.getOrientOdoEst());
+  if (millis()%1000 < 10) {
+    Serial.print("Theta: ");
+    Serial.println(drivetrain->getOrientOdoEst());
+  //   Serial.print("X: ");
+  //   Serial.println(drivetrain->getXOdoEst());
+  //   Serial.print("Y: ");
+  //   Serial.println(drivetrain->getYOdoEst());
+  }
   drivetrain->drive(8.0, 0);
   delay(5);
 }
