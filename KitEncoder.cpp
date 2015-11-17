@@ -14,11 +14,12 @@ KitEncoder::KitEncoder(int slavePin) {
  * Performs initial setup of the encoder, using a 4-byte counter, in quadrature mode, MSB transferred first, using SPI Mode 0
  **/
 void KitEncoder::initialize() {
+  pinMode(_slavePin, OUTPUT);
   digitalWrite(_slavePin,HIGH);
   spiSettings = SPISettings(40000, MSBFIRST, SPI_MODE0);
   SPI.begin();
   SPI.beginTransaction(spiSettings); 
-  pinMode(_slavePin, OUTPUT);
+
 
   digitalWrite(_slavePin,LOW);        // Begin SPI conversation
   SPI.transfer(0x88);                       // Write to MDR0
