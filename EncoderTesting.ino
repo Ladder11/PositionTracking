@@ -11,13 +11,12 @@ RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
 
+float angle;
+
 bool output = true;
 
 void setup() {
   Serial.begin(115200); 
-  pinMode(24, INPUT_PULLUP); 
-
-  attachInterrupt(digitalPinToInterrupt(20), toggle, FALLING);
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
@@ -37,26 +36,19 @@ void setup() {
 }
 
 void loop() {
-  if (millis()%1000 < 10 && output) {
+  if (millis()%1000 < 10) {
     Serial.print("Theta: ");
-    Serial.println(drivetrain->getOrientOdoEst());
-     Serial.print("X: ");
-     Serial.println(drivetrain->getXOdoEst());
-     Serial.print("Y: ");
-     Serial.println(drivetrain->getYOdoEst());
+    angle = drivetrain->getOrientOdoEst()*180/3.1415;
+    Serial.println(angle);
+    Serial.print("X: ");
+    Serial.println(drivetrain->getXOdoEst());
+    Serial.print("Y: ");
+    Serial.println(drivetrain->getYOdoEst());
   }
   
-    drivetrain->drive(6.0, 0);
+  drivetrain->drive(6.0, 0);
   
   //rightMotor->setOutput(1.0);
   //leftMotor->setOutput(1.0);
   delay(5);
-}
-
-void toggle() {
-  if (output) {
-    output = false;
-  } else {
-    output = true; 
-  }
 }
