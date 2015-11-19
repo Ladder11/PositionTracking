@@ -14,7 +14,7 @@ Drivetrain::Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, fl
 	_trackWidth = trackWidth;
 	_wheelDia = wheelDia;
 	_speedConversion = 19.1/wheelDia/gearRatio; //19.099 = 60/pi //#TODO Check this number
-	_turnConversion = _gearRatio*_wheelDia*3.1415;
+	_turnConversion = gearRatio*wheelDia*3.1415;
 }
 
 /**
@@ -52,28 +52,27 @@ double Drivetrain::getYOdoEst() {
 
 /**
  * Assumes that the robot is facing along the +y axis when turned on
- * @return float theta Deviation from the +y axis, +/- 180deg
+ * @return float theta Deviation from the +y axis, in radians
  **/
 double Drivetrain::getOrientOdoEst() {
-	while (_theta >= 360) {
-		_theta-=360;
-	}
-	while (_theta <= -360) {
-		_theta+=360; 
-	}
-	if (_theta > 180) {
-		_theta -= 360;
-	} else if (_theta < -180) {
-		_theta += 360;
-	}
+	// while (_theta >= 360) {
+	// 	_theta-=360;
+	// }
+	// while (_theta <= -360) {
+	// 	_theta+=360; 
+	// }
+	// if (_theta > 180) {
+	// 	_theta -= 360;
+	// } else if (_theta < -180) {
+	// 	_theta += 360;
+	// }
 	return _theta; 
 }
 
 /**
- * Updates the odometry estimates for the robot's x and y positions
+ * Updates the odometry estimates for the robot's x, y, and theta positions
  **/
 void Drivetrain::updateRobotPos() {
-	currAngle = getOrientOdoEst()*3.1415/180.0;
 
 	currLeft = _leftMotor->getRevolutions();
 	currRight = _rightMotor->getRevolutions();
@@ -81,10 +80,16 @@ void Drivetrain::updateRobotPos() {
 	leftDelta = currLeft-prevLeft;
 	rightDelta = currRight-prevRight;
 	robotDelta = (leftDelta+rightDelta)/2*_turnConversion;
+	// Serial.print("Left: ");
+	// Serial.println(leftDelta);
+	// Serial.print("Right: ");
+	// Serial.println(rightDelta);
 
-	xPos+=robotDelta*sin(currAngle);
-	yPos+=robotDelta*cos(currAngle);
-	_theta=atan((currLeft-currRight)*_turnConversion/_trackWidth)*180/3.1415;
+	_theta+=atan((leftDelta-rightDelta)*_turnConversion/_trackWidth);
+	// Serial.print("Theta: ");
+	// Serial.println(_theta);
+	xPos+=robotDelta*sin(_theta);
+	yPos+=robotDelta*cos(_theta);
 
 	prevLeft = currLeft;
 	prevRight = currRight;
