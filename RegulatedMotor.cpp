@@ -26,7 +26,7 @@ void RegulatedMotor::initialize() {
 **/
 void RegulatedMotor::setRPM(float rpms) {
 	arpm = getRPM();
-	Serial.println(arpm);
+	//Serial.println(arpm);
 	newOut = out + 0.001*(rpms-arpm);
 	//Serial.println(newOut);
 	//Serial.println(newOut);
