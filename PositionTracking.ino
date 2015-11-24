@@ -21,6 +21,8 @@ void setup() {
   Serial.begin(115200); 
 
   gyro = new Gyro();
+  gyro->initialize();
+  Serial.println("Gyro initialized");
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
@@ -41,9 +43,9 @@ void setup() {
 
 void loop() {
   if (millis()%1000 < 10) {
-    Serial.print("Odo Theta: ");
-    angle = drivetrain->getOrientOdoEst()*180/3.1415;
-    Serial.println(angle);
+    // Serial.print("Odo Theta: ");
+    // angle = drivetrain->getOrientOdoEst()*180/3.1415;
+    // Serial.println(angle);
     Serial.print("Gyro Theta: ");
     Serial.println(gyro->getZGyro());
     // Serial.print("X: ");
@@ -51,8 +53,9 @@ void loop() {
     // Serial.print("Y: ");
     // Serial.println(drivetrain->getYOdoEst());
   }
+  gyro->updateGyro();
   
-  drivetrain->drive(6.0, 0);
+  //drivetrain->drive(6.0, 0);
   
   //rightMotor->setOutput(1.0);
   //leftMotor->setOutput(1.0);
