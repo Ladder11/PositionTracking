@@ -4,8 +4,11 @@
 //complimentary filter with the accelerometer for greater accuracy over longer periods of time. 
 #include "Gyro.h"
 
-void initialize() {
-  Serial.begin(9600);
+Gyro::Gyro() {
+
+}
+
+void Gyro::initialize() {
   Wire.begin(); // i2c begin
   gyro.enableDefault(); // gyro init. default 250/deg/s
   delay(1000);// allow time for gyro to settle
@@ -15,19 +18,19 @@ void initialize() {
   prevTime = millis();
 }
 
-float getXGyro() {
+float Gyro::getXGyro() {
   return gyro_xcumulative;
 }
 
-float getXGyro() {
+float Gyro::getYGyro() {
   return gyro_ycumulative;
 }
 
-float getXGyro() {
+float Gyro::getZGyro() {
   return gyro_zcumulative;
 }
 
-void updateGyro() {
+void Gyro::updateGyro() {
   Dt = (float)(millis()-prevTime)/1000.0;
   gyro.read(); // read gyro
 
@@ -46,7 +49,7 @@ void updateGyro() {
   prevTime=millis(); //reset prevTime
 }
 
-void setGyroOffset() {
+void Gyro::setGyroOffset() {
   for(int i =0;i<100;i++){  // takes 100 samples of the gyro
     gyro.read();
     gerrx+=gyro.g.x;
@@ -64,7 +67,7 @@ void setGyroOffset() {
   Serial.println(gerrz);
 }
 
-void setGyroDrift() {
+void Gyro::setGyroDrift() {
 // Get drift rate
   long stime = millis();
   for(int i =0;i<100;i++){  // takes 100 samples of the gyro

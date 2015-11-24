@@ -2,6 +2,7 @@
 #include "KitMotor.h"
 #include "RegulatedMotor.h"
 #include "Drivetrain.h"
+#include "Gyro.h"
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -10,6 +11,7 @@ KitMotor* leftMotor;
 RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
+Gyro* gyro;
 
 float angle;
 
@@ -17,6 +19,8 @@ bool output = true;
 
 void setup() {
   Serial.begin(115200); 
+
+  gyro = new Gyro();
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
