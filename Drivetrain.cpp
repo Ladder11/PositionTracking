@@ -100,16 +100,16 @@ void Drivetrain::updateRobotPos() {
 void Drivetrain::followLeftWall(){
 	if(getInchestoWall(leftUSPin)<2)
 		drive(2,10);
-	else if(getInchestoWall(rightUSPin>4)
+	else if(getInchestoWall(rightUSPin)>4)
 		drive(2,-10);
 	else
 		drive(2,0);
 }
 
-void Drivetrain::followRIghtWall(){
-	if(getInchestoWall(RightUSPin)<2)
+void Drivetrain::followRightWall(){
+	if(getInchestoWall(rightUSPin)<2)
 		drive(2,-10);
-	else if(getInchestoWall(rightUSPin>4)
+	else if(getInchestoWall(rightUSPin)>4)
 		drive(2,10);
 	else
 		drive(3,0);
