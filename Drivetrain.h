@@ -8,6 +8,9 @@ public:
   Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, float wheelDia, float gearRatio, float trackWidth);
   void initialize();
   void drive(float velocity, float turnVelocity);
+  void followLeftWall();
+  void followRightWall();
+  float getInchestoWall(int pin);
   double getXOdoEst();
   double getYOdoEst();
   double getOrientOdoEst();
@@ -19,6 +22,8 @@ private:
         currAngle, _turnConversion, currLeft, currRight, prevLeft, prevRight, 
         leftDelta, rightDelta, robotDelta;
   double xPos, yPos, _theta;
+  const int rightUSPin = 21;
+  const int leftUSPin = 20;
 };
 
 
