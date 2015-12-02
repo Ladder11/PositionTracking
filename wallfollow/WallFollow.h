@@ -12,7 +12,7 @@ public:
   void followRightWall();
   float getInchestoWall(int pingPinIN, int pingPinOUT);
 private:
-  Drivetrain* drivetrain;
+  Drivetrain* _drivetrain;
   ultrasonic* _rUS;
   ultrasonic* _lUS;
 };

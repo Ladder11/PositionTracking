@@ -27,7 +27,7 @@ void RegulatedMotor::initialize() {
 void RegulatedMotor::setRPM(float rpms) {
 	arpm = getRPM();
 	//Serial.println(arpm);
-	newOut = out + 0.001*(rpms-arpm);
+	newOut = out + 0.007*(rpms-arpm);
 	//Serial.println(newOut);
 	//Serial.println(newOut);
 	out = constrain(newOut, -1.0, 1.0);

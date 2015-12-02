@@ -54,20 +54,20 @@ void setup() {
 }
 
 void loop() {
-  if (millis()%1000 < 10) {
-    //Serial.print(lUS->distance());
-    // angle = drivetrain->getOrientOdoEst()*180/3.1415;
-    // Serial.println(angle);
-    // Serial.print("X: ");
-    // Serial.println(drivetrain->getXOdoEst());
-    // Serial.print("Y: ");
-    // Serial.println(drivetrain->getYOdoEst());
+  // if (millis()%1000 < 10) {
+  //   //Serial.print(lUS->distance());
+  //   // angle = drivetrain->getOrientOdoEst()*180/3.1415;
+  //   // Serial.println(angle);
+  //   // Serial.print("X: ");
+  //   // Serial.println(drivetrain->getXOdoEst());
+  //   // Serial.print("Y: ");
+  //   // Serial.println(drivetrain->getYOdoEst());
    
-  }
+  // }
   wallFollow->followLeftWall();
   
   
   //rightMotor->setOutput(1.0);
   //leftMotor->setOutput(1.0);
-  delay(5);
+  //delay(5);
 }

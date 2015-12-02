@@ -3,6 +3,7 @@
 WallFollow::WallFollow(Drivetrain* drivetrain, ultrasonic* leftSensor, ultrasonic* rightSensor) {
 	_lUS = leftSensor;
 	_rUS = rightSensor;
+	_drivetrain=drivetrain;
 }
 
 void WallFollow::initialize() {
@@ -10,20 +11,29 @@ void WallFollow::initialize() {
 }
 
 void WallFollow::followLeftWall(){
-	if(_lUS->distance()<7)
-		drive(5,20);
-	else if(_lUS->distance()>7)
-		drive(2,-10);
+	float dist=_lUS->distance();
+	if(dist>7.5){
+		_drivetrain->drive(0,40); 
+		Serial.println("TURNING RIGHT");}
+
+	else if(dist<6){
+		_drivetrain->drive(0,-40); 
+		Serial.println("turning left");}
 	else
-		drive(2,0);
+		_drivetrain->drive(2,0);
   Serial.println(_lUS->distance());
 }
 
 void WallFollow::followRightWall(){
-	// if(_rUS->distance()<2)
-	// 	drive(2,-10);
-	// else if(_rUS->distance()>2)
-	// 	drive(2,10);
-	// else
-	// 	drive(3,0);
+	float dist=_rUS->distance();
+	if(dist<6){
+		_drivetrain->drive(1,25); 
+		Serial.println("TURNING RIGHT");}
+
+	else if(dist>7.5){
+		_drivetrain->drive(1,-25); 
+		Serial.println("turning left");}
+	else
+		_drivetrain->drive(2,0);
+  Serial.println(_lUS->distance());
 }
