@@ -47,7 +47,7 @@ void loop() {
     // angle = drivetrain->getOrientOdoEst()*180/3.1415;
     // Serial.println(angle);
     Serial.print("Gyro Theta: ");
-    Serial.println(gyro->getZGyro());
+    Serial.println(gyro->getGyro());
     // Serial.print("X: ");
     // Serial.println(drivetrain->getXOdoEst());
     // Serial.print("Y: ");
