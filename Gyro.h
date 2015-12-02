@@ -14,7 +14,7 @@ class Gyro {
 		void setGyroDrift();
 	private:
 		long prevTime;   //general purpose timer
-		float G_gain=.00875; // gyros gain factor for 250deg/sec
+		float G_gain=.0105; // gyros gain factor for 250deg/sec
 		float gyro_x, gyro_xcumulative, gerrx, gdriftx, Dt;
 		L3G gyro;
 };
