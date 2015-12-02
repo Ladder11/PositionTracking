@@ -98,18 +98,19 @@ void Drivetrain::updateRobotPos() {
 }
 
 void Drivetrain::followLeftWall(){
-	if(getInchestoWall(leftUSPin)<2)
-		drive(2,10);
-	else if(getInchestoWall(rightUSPin)>4)
-		drive(2,-10);
-	else
-		drive(2,0);
+//	if(_lUS->distance()<2)
+//		drive(5,20);
+//	else if(_lUS->distance()>2)
+//		drive(2,-10);
+//	else
+//		drive(2,0);
+  Serial.print(_lUS->distance());
 }
 
 void Drivetrain::followRightWall(){
-	if(getInchestoWall(rightUSPin)<2)
+	if(_rUS->distance()<2)
 		drive(2,-10);
-	else if(getInchestoWall(rightUSPin)>4)
+	else if(_rUS->distance()>2)
 		drive(2,10);
 	else
 		drive(3,0);
@@ -133,36 +134,41 @@ long microsecondsToCentimeters(long microseconds)
   return microseconds / 29 / 2;
 }
 
-float Drivetrain::getInchestoWall(int pingPin){
-	// establish variables for duration of the ping,
-  // and the distance result in inches and centimeters:
-  long duration, inches, cm;
-
-  // The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
-  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  pinMode(pingPin, OUTPUT);
-  digitalWrite(pingPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(pingPin, HIGH);
-  delayMicroseconds(5);
-  digitalWrite(pingPin, LOW);
-
-  // The same pin is used to read the signal from the PING))): a HIGH
-  // pulse whose duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
-  pinMode(pingPin, INPUT);
-  duration = pulseIn(pingPin, HIGH);
-
-  // convert the time into a distance
-  inches = microsecondsToInches(duration);
-  //cm = microsecondsToCentimeters(duration);
-
-  Serial.print(inches);
-  Serial.print("in, ");
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
-
-  delay(10);
-  return inches;
-}
+//float Drivetrain::getInchestoWall(int pingPinIN, int pingPinOUT){
+//	float dist = 0;
+//
+// 
+//
+//  
+//  dist = ultrasonic.distance();
+//
+//  //if the distance measured is past 108in (max range) set it to 108
+//  //likely want to resample in this case
+//  if (dist > 108.0) dist = 108;
+//
+//  //check to see if the the distance reached within 10% of the desired distance
+//  if (dist >= desiredDist * 0.9 && dist <= desiredDist * 1.1) {
+//    Serial.println("Target Reached!");
+//    Serial.print("Dist: ");
+//    Serial.println(dist, DEC);
+//
+//    //do something
+//
+//  }
+//  //if it's too close
+//  else if (dist < desiredDist) {
+//    Serial.println("Too Close!");
+//    Serial.print("Dist: ");
+//    Serial.println(dist, DEC);
+//    
+//    //do something
+//
+//  }
+//  //otherwise it's too far
+//  else{
+//    Serial.println("Too far!");
+//    Serial.print("Dist: ");
+//    Serial.println(dist, DEC);
+//    
+//    //do something
+//}
