@@ -9,9 +9,6 @@ public:
   Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, float wheelDia, float gearRatio, float trackWidth);
   void initialize();
   void drive(float velocity, float turnVelocity);
-  void followLeftWall();
-  void followRightWall();
-  float getInchestoWall(int pingPinIN, int pingPinOUT);
   double getXOdoEst();
   double getYOdoEst();
   double getOrientOdoEst();
@@ -19,8 +16,7 @@ public:
 private:
   RegulatedMotor* _leftMotor;
   RegulatedMotor* _rightMotor;
-  ultrasonic* _lUS;
- ultrasonic* _rUS;
+  ultrasonic* rUS;
   float _speedConversion, _gearRatio, _trackWidth, V_r, V_l, _wheelDia, prevVel, 
         currAngle, _turnConversion, currLeft, currRight, prevLeft, prevRight, 
         leftDelta, rightDelta, robotDelta;

@@ -4,6 +4,7 @@
 #include "RegulatedMotor.h"
 #include "Drivetrain.h"
 #include "ultrasonic.h"
+#include "WallFollow.h"
 
 
 KitEncoder* rightEncoder;
@@ -14,6 +15,8 @@ RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
 ultrasonic* lUS;
+ultrasonic* rUS;
+WallFollow* wallFollow;
 
 float angle;
 
@@ -26,7 +29,8 @@ void setup() {
   leftEncoder = new KitEncoder(23);
   rightMotor = new KitMotor(4, 5);
   leftMotor = new KitMotor(6, 7);
-  lUS= new ultrasonic(24,25);
+  lUS = new ultrasonic(25,24);
+  rUS = new ultrasonic(29, 28);
   
   
   
@@ -38,7 +42,8 @@ void setup() {
 
   leftRegMotor = new RegulatedMotor(leftMotor, leftEncoder, 50, 64);
   rightRegMotor = new RegulatedMotor(rightMotor, rightEncoder, 50, 64);
-  drivetrain = new Drivetrain(leftRegMotor, rightRegMotor, 2.75, 0.3, 5.3125);  
+  drivetrain = new Drivetrain(leftRegMotor, rightRegMotor, 2.75, 0.3, 5.3125); 
+  wallFollow = new WallFollow(drivetrain, lUS, rUS);
 //  pinMode(leftUSPinOUT, OUTPUT);
 //  pinMode(rightUSPinOUT, OUTPUT);
 //  pinMode(leftUSPinIN, INPUT);
@@ -59,7 +64,7 @@ void loop() {
     // Serial.println(drivetrain->getYOdoEst());
    
   }
-   drivetrain->followLeftWall();
+  wallFollow->followLeftWall();
   
   
   //rightMotor->setOutput(1.0);
