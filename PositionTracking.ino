@@ -2,6 +2,7 @@
 #include "KitMotor.h"
 #include "RegulatedMotor.h"
 #include "Drivetrain.h"
+#include "Gyro.h"
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -10,6 +11,7 @@ KitMotor* leftMotor;
 RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
+Gyro* gyro;
 
 float angle;
 
@@ -17,6 +19,10 @@ bool output = true;
 
 void setup() {
   Serial.begin(115200); 
+
+  gyro = new Gyro();
+  gyro->initialize();
+  Serial.println("Gyro initialized");
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
@@ -37,16 +43,19 @@ void setup() {
 
 void loop() {
   if (millis()%1000 < 10) {
-    Serial.print("Theta: ");
-    angle = drivetrain->getOrientOdoEst()*180/3.1415;
-    Serial.println(angle);
-    Serial.print("X: ");
-    Serial.println(drivetrain->getXOdoEst());
-    Serial.print("Y: ");
-    Serial.println(drivetrain->getYOdoEst());
+    // Serial.print("Odo Theta: ");
+    // angle = drivetrain->getOrientOdoEst()*180/3.1415;
+    // Serial.println(angle);
+    Serial.print("Gyro Theta: ");
+    Serial.println(gyro->getGyro());
+    // Serial.print("X: ");
+    // Serial.println(drivetrain->getXOdoEst());
+    // Serial.print("Y: ");
+    // Serial.println(drivetrain->getYOdoEst());
   }
+  gyro->updateGyro();
   
-  drivetrain->drive(6.0, 0);
+  //drivetrain->drive(6.0, 0);
   
   //rightMotor->setOutput(1.0);
   //leftMotor->setOutput(1.0);
