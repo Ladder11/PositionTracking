@@ -4,6 +4,7 @@
 #include "KitMotor.h"
 #include "RegulatedMotor.h"
 #include "Drivetrain.h"
+#include "Servo.h"
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -16,11 +17,13 @@ Drivetrain* drivetrain;
 PVision ircam;
 byte result;
 float error;
+Servo prop;
 
 void setup()
 {
   Serial.begin(115200);
   Serial.println("Hello");
+  prop.attach(11, 1000, 2000);
   ircam.init();
 
   rightEncoder = new KitEncoder(22);
@@ -42,7 +45,17 @@ void setup()
 
 void loop() {
   result = ircam.read();
-  error = (512-ircam.Blob1.X)*-0.25;
+  error = (512-ircam.Blob1.X)*-0.5;
+  if (abs(error) < 2) {
+    drivetrain->drive(0, 0);
+  prop.write(180);
+  delay(40);
+  prop.write(0);
+  delay(40);
+  prop.write(180);
+  delay(2000);
+    while(1);
+  }
   if (result&BLOB1) {
     Serial.print("X: ");
     Serial.println(ircam.Blob1.X);
