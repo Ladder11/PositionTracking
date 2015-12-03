@@ -23,7 +23,7 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println("Hello");
-  prop.attach(11, 1000, 2000);
+
   ircam.init();
 
   rightEncoder = new KitEncoder(22);
@@ -48,13 +48,26 @@ void loop() {
   error = (512-ircam.Blob1.X)*-0.5;
   if (abs(error) < 2) {
     drivetrain->drive(0, 0);
-  prop.write(180);
-  delay(40);
-  prop.write(0);
-  delay(40);
-  prop.write(180);
-  delay(2000);
-    while(1);
+    digitalWrite(4, LOW);
+    digitalWrite(5, LOW);
+    digitalWrite(6, LOW);
+    digitalWrite(7, LOW);
+    prop.attach(11, 1000, 2000);
+    prop.write(180);
+    delay(40);
+    prop.write(0);
+    delay(1000);
+    prop.write(180);
+    while(1){
+      result = ircam.read();
+      if (!(result&BLOB1)){
+        delay(3000);
+        result = ircam.read();
+        if (!(result&BLOB1)){
+          prop.write(0);
+        }
+      }
+    }
   }
   if (result&BLOB1) {
     Serial.print("X: ");
