@@ -46,7 +46,7 @@ void setup()
 void loop() {
   result = ircam.read();
   error = (512-ircam.Blob1.X)*-0.5;
-  if (abs(error) < 2) {
+  if (abs(error) < 2 && abs((300-analogRead(0))) < 10) {
     drivetrain->drive(0, 0);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -77,7 +77,8 @@ void loop() {
   } else {
     Serial.println("Nothing");
   }
-  
-  drivetrain->drive(0, error);
+  Serial.print("Flame sensor: ");
+  Serial.println(analogRead(0));
+  drivetrain->drive(-.01*(300-analogRead(0)), error);
 
 }
