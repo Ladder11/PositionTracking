@@ -5,6 +5,7 @@
 #include "RegulatedMotor.h"
 #include "Drivetrain.h"
 #include "Servo.h"
+#include "FlameSense.h"
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -13,18 +14,14 @@ KitMotor* leftMotor;
 RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
+FlameSense* flameSense;
 
-PVision ircam;
-byte result;
-float error;
 Servo prop;
 
 void setup()
 {
   Serial.begin(115200);
   Serial.println("Hello");
-
-  ircam.init();
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
@@ -41,12 +38,13 @@ void setup()
   drivetrain = new Drivetrain(leftRegMotor, rightRegMotor, 2.75, 0.3, 5.3125);  
   drivetrain->initialize();
 
+  flameSense = new FlameSense(40, 30);
+  flameSense->initialize();
+
 }
 
 void loop() {
-  result = ircam.read();
-  error = (512-ircam.Blob1.X)*-0.5;
-  if (abs(error) < 2 && abs((300-analogRead(0))) < 10) {
+  if (flameSense->flameAngle()*180/3.14 < 2 && abs(flameSense->flameDistance()) < 10) {
     drivetrain->drive(0, 0);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -59,26 +57,26 @@ void loop() {
     delay(1000);
     prop.write(180);
     while(1){
-      result = ircam.read();
-      if (!(result&BLOB1)){
+      if (!flameSense->isFlame()){
         delay(3000);
-        result = ircam.read();
-        if (!(result&BLOB1)){
+        if (!flameSense->isFlame()){
           prop.write(0);
+          Serial.println(drivetrain->getXOdoEst());
+          Serial.println(drivetrain->getYOdoEst());
+          Serial.println(drivetrain->getOrientOdoEst());
+          delay(5000);
         }
       }
     }
   }
-  if (result&BLOB1) {
-    Serial.print("X: ");
-    Serial.println(ircam.Blob1.X);
-    Serial.print("Y: ");
-    Serial.println(ircam.Blob1.Y);
+  if (flameSense->isFlame()) {
+    Serial.println("Flame");
   } else {
     Serial.println("Nothing");
   }
   Serial.print("Flame sensor: ");
   Serial.println(analogRead(0));
-  drivetrain->drive(-.01*(300-analogRead(0)), error);
+  drivetrain->drive(-.01*(800-flameSense->flameDistance()), flameSense->flameAngle()*.3);
+  //drivetrain->updateRobotPos();
 
 }
