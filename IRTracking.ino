@@ -17,6 +17,7 @@ Drivetrain* drivetrain;
 FlameSense* flameSense;
 
 Servo prop;
+float distSpeed;
 
 void setup()
 {
@@ -44,7 +45,7 @@ void setup()
 }
 
 void loop() {
-  if (flameSense->flameAngle()*180/3.14 < 2 && abs(flameSense->flameDistance()) < 10) {
+  if (abs(flameSense->flameAngle()*180/3.14) < 10 && abs(700-flameSense->flameDistance()) < 30) {
     drivetrain->drive(0, 0);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -76,7 +77,11 @@ void loop() {
   }
   Serial.print("Flame sensor: ");
   Serial.println(analogRead(0));
-  drivetrain->drive(-.01*(800-flameSense->flameDistance()), flameSense->flameAngle()*.3);
+  distSpeed = .01*(flameSense->flameDistance()-700);
+  if (flameSense->flameDistance()-700 < 20) {
+    distSpeed = 0;
+  }
+  drivetrain->drive(distSpeed, flameSense->flameAngle()*180/3.1415*-7); //-.01*(800-flameSense->flameDistance())
   //drivetrain->updateRobotPos();
 
 }
