@@ -6,6 +6,8 @@
 #include "Drivetrain.h"
 #include "Servo.h"
 #include "FlameSense.h"
+#include "ultrasonic.h"
+#include <LiquidCrystal.h>
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -15,6 +17,16 @@ RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
 FlameSense* flameSense;
+ultrasonic frontSensor(26, 27);
+
+LiquidCrystal lcd(40, 41, 42, 43, 44, 45);
+
+// White, Green, Yellow - SPI
+// Grey, Purple, White, Black - I2C
+// Red 4-Blue, 5-Green, Yellow 6-Blue, 7-Green
+// 2nd power - blue
+
+// Yellow - 22, orange - 23
 
 Servo prop;
 float distSpeed;
@@ -23,6 +35,7 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println("Hello");
+  lcd.begin(16, 2);
 
   rightEncoder = new KitEncoder(22);
   leftEncoder = new KitEncoder(23);
@@ -45,7 +58,7 @@ void setup()
 }
 
 void loop() {
-  if (abs(flameSense->flameAngle()*180/3.14) < 10 && abs(700-flameSense->flameDistance()) < 30) {
+  if (abs(flameSense->flameAngle()*180/3.14) < 10 && frontSensor.distance() < 20) {
     drivetrain->drive(0, 0);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -62,9 +75,15 @@ void loop() {
         delay(3000);
         if (!flameSense->isFlame()){
           prop.write(0);
-          Serial.println(drivetrain->getXOdoEst());
-          Serial.println(drivetrain->getYOdoEst());
-          Serial.println(drivetrain->getOrientOdoEst());
+          lcd.setCursor(0, 0);
+          lcd.print("X: ");
+          lcd.print(drivetrain->getXOdoEst());
+          lcd.setCursor(0, 1);
+          lcd.print("Y: ");
+          lcd.print(drivetrain->getYOdoEst());
+          lcd.setCursor(7, 1);
+          lcd.print(" T: ");
+          lcd.print(drivetrain->getOrientOdoEst());
           delay(5000);
         }
       }
@@ -77,11 +96,11 @@ void loop() {
   }
   Serial.print("Flame sensor: ");
   Serial.println(analogRead(0));
-  distSpeed = .01*(flameSense->flameDistance()-700);
+  distSpeed = .05*(frontSensor.distance()-20);
   if (flameSense->flameDistance()-700 < 20) {
     distSpeed = 0;
   }
   drivetrain->drive(distSpeed, flameSense->flameAngle()*180/3.1415*-7); //-.01*(800-flameSense->flameDistance())
-  //drivetrain->updateRobotPos();
+  drivetrain->updateRobotPos();
 
 }
