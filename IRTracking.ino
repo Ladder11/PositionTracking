@@ -77,11 +77,11 @@ void loop() {
           prop.write(0);
           lcd.setCursor(0, 0);
           lcd.print("X: ");
-          lcd.print(drivetrain->getXOdoEst());
-          lcd.setCursor(0, 1);
+          lcd.print(drivetrain->getXOdoEst(), DEC);
+          lcd.setCursor(7, 0);
           lcd.print("Y: ");
-          lcd.print(drivetrain->getYOdoEst());
-          lcd.setCursor(7, 1);
+          lcd.print(drivetrain->getYOdoEst(), DEC);
+          lcd.setCursor(0, 1);
           lcd.print(" T: ");
           lcd.print(drivetrain->getOrientOdoEst());
           delay(5000);
