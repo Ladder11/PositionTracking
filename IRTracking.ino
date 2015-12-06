@@ -90,17 +90,22 @@ void loop() {
     }
   }
   if (flameSense->isFlame()) {
-    Serial.println("Flame");
+    lcd.clear();
+    lcd.setCursor(0,0);
+    lcd.print("Flame \n");
+    lcd.setCursor(0, 1);
+    lcd.print(flameSense->flameAngle()*180/3.1415);
   } else {
-    Serial.println("Nothing");
+    lcd.clear();
+    lcd.println("Nothing\n");
   }
-  Serial.print("Flame sensor: ");
+  Serial.print("Flame sensor: \n");
   Serial.println(analogRead(0));
-  distSpeed = .05*(frontSensor.distance()-20);
-  if (flameSense->flameDistance()-700 < 20) {
-    distSpeed = 0;
+  distSpeed = .2*(frontSensor.distance()-20);
+  if (distSpeed > 6) {
+    distSpeed = 6;
   }
-  drivetrain->drive(distSpeed, flameSense->flameAngle()*180/3.1415*-7); //-.01*(800-flameSense->flameDistance())
+  drivetrain->drive(distSpeed, flameSense->flameAngle()*180/3.1415*4); //-.01*(800-flameSense->flameDistance())
   drivetrain->updateRobotPos();
 
 }
