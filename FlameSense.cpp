@@ -20,12 +20,12 @@ bool FlameSense::isFlame() {
 
 float FlameSense::flameAngle() {
 	ircam.read();
-	return atan((512-ircam.Blob1.X)*_xAngleComp);
+	return atan((512-ircam.Blob1.Y)*_yAngleComp);
 }
 
 float FlameSense::flameHeight() {
 	ircam.read();
-	return sin(atan((512-ircam.Blob1.Y)*_yAngleComp))*flameDistance();
+	return sin(atan((512-ircam.Blob1.X)*_xAngleComp))*flameDistance();
 }
 
 float FlameSense::flameDistance() {
