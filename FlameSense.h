@@ -2,6 +2,7 @@
 #define FLAMESENSE
 #include <Arduino.h>
 #include <PVision.h>
+#include "ultrasonic.h"
 
 class FlameSense {
 	public: 
@@ -9,8 +10,8 @@ class FlameSense {
 		void initialize();
 		bool isFlame();
 		float flameAngle();
-		float flameHeight();
-		float flameDistance();
+		float flameHeight(ultrasonic frontSensor);
+		float flameDistance(ultrasonic frontSensor);
 	private:
 		float _xAngleComp, _yAngleComp;
 		PVision ircam;
