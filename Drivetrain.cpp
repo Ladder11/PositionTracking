@@ -23,6 +23,8 @@ Drivetrain::Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, fl
 void Drivetrain::initialize() {
 	xPos = 0;
 	yPos = 0;
+	prevLeft = 0;
+	prevRight = 0;
 	_theta = 0;
 }
 
