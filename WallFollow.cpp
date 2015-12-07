@@ -26,6 +26,6 @@ void WallFollow::followLeftWall(){
 
 void WallFollow::followRightWall(float set){
 	float dist=_rUS->distance();
-	_drivetrain->drive(4, set-dist);
+	_drivetrain->drive(3.5, 12*(set-dist));
   	Serial.println(_lUS->distance());
 }
