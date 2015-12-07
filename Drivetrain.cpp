@@ -23,6 +23,8 @@ Drivetrain::Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, fl
 void Drivetrain::initialize() {
 	xPos = 0;
 	yPos = 0;
+	prevLeft = 0;
+	prevRight = 0;
 	_theta = 0;
 }
 
@@ -40,6 +42,11 @@ void Drivetrain::drive(float velocity, float turnVelocity) {
 	_rightMotor->setRPM(V_r*_speedConversion);
 	_leftMotor->setRPM(V_l*_speedConversion);
 	updateRobotPos();
+}
+
+void Drivetrain::stop() {
+	_leftMotor->setRPM(0);
+	_rightMotor->setRPM(0);
 }
 
 double Drivetrain::getXOdoEst() {
