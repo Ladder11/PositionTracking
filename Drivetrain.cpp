@@ -44,6 +44,11 @@ void Drivetrain::drive(float velocity, float turnVelocity) {
 	updateRobotPos();
 }
 
+void Drivetrain::stop() {
+	_leftMotor->setRPM(0);
+	_rightMotor->setRPM(0);
+}
+
 double Drivetrain::getXOdoEst() {
 	return xPos;
 }

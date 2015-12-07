@@ -8,6 +8,7 @@ public:
   Drivetrain(RegulatedMotor* leftMotor, RegulatedMotor* rightMotor, float wheelDia, float gearRatio, float trackWidth);
   void initialize();
   void drive(float velocity, float turnVelocity);
+  void stop();
   double getXOdoEst();
   double getYOdoEst();
   double getOrientOdoEst();
