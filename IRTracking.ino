@@ -82,7 +82,7 @@ void loop() {
           lcd.print("Y: ");
           lcd.print(drivetrain->getYOdoEst(), DEC);
           lcd.setCursor(0, 1);
-          lcd.print(" T: ");
+          lcd.print("T: ");
           lcd.print(drivetrain->getOrientOdoEst());
           delay(5000);
         }
@@ -93,15 +93,18 @@ void loop() {
     lcd.clear();
     lcd.setCursor(0,0);
     lcd.print("Flame \n");
-    lcd.setCursor(0, 1);
+    lcd.setCursor(7, 0);
     lcd.print(flameSense->flameAngle()*180/3.1415);
+    lcd.setCursor(0, 1);
+    lcd.print("Z: ");
+    lcd.print(flameSense->flameHeight(frontSensor));
   } else {
     lcd.clear();
     lcd.println("Nothing\n");
   }
   Serial.print("Flame sensor: \n");
   Serial.println(analogRead(0));
-  distSpeed = .2*(frontSensor.distance()-20);
+  distSpeed = .17*(frontSensor.distance()-20);
   if (distSpeed > 6) {
     distSpeed = 6;
   }
