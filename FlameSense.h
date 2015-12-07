@@ -10,8 +10,8 @@ class FlameSense {
 		void initialize();
 		bool isFlame();
 		float flameAngle();
-		float flameHeight(ultrasonic frontSensor);
-		float flameDistance(ultrasonic frontSensor);
+		float flameHeight(ultrasonic* frontSensor);
+		float flameDistance(ultrasonic* frontSensor);
 	private:
 		float _xAngleComp, _yAngleComp;
 		PVision ircam;

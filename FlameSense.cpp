@@ -23,11 +23,11 @@ float FlameSense::flameAngle() {
 	return atan((512-ircam.Blob1.Y)*_yAngleComp);
 }
 
-float FlameSense::flameHeight(ultrasonic frontSensor) {
+float FlameSense::flameHeight(ultrasonic* frontSensor) {
 	ircam.read();
 	return sin(atan((512-ircam.Blob1.X)*_xAngleComp))*flameDistance(frontSensor)+8;
 }
 
-float FlameSense::flameDistance(ultrasonic frontSensor) {
-	return frontSensor.distance(); //#TODO: Fix this function
+float FlameSense::flameDistance(ultrasonic* frontSensor) {
+	return frontSensor->distance(); //#TODO: Fix this function
 }

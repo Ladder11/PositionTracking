@@ -8,6 +8,7 @@
 #include "FlameSense.h"
 #include "ultrasonic.h"
 #include <LiquidCrystal.h>
+#include "WallFollow.h"
 
 KitEncoder* rightEncoder;
 KitEncoder* leftEncoder;
@@ -17,7 +18,10 @@ RegulatedMotor* leftRegMotor;
 RegulatedMotor* rightRegMotor;
 Drivetrain* drivetrain;
 FlameSense* flameSense;
-ultrasonic frontSensor(26, 27);
+ultrasonic* frontSensor;
+ultrasonic* leftSensor;
+ultrasonic* rightSensor;
+WallFollow* wallFollow;
 
 LiquidCrystal lcd(40, 41, 42, 43, 44, 45);
 
@@ -52,13 +56,18 @@ void setup()
   drivetrain = new Drivetrain(leftRegMotor, rightRegMotor, 2.75, 0.3, 5.3125);  
   drivetrain->initialize();
 
+  frontSensor = new ultrasonic(26, 27);
+  leftSensor = new ultrasonic(28,29);
+  rightSensor = new ultrasonic(24, 25);
+  wallFollow = new WallFollow(drivetrain, leftSensor, rightSensor);
+
   flameSense = new FlameSense(40, 30);
   flameSense->initialize();
 
 }
 
 void loop() {
-  if (abs(flameSense->flameAngle()*180/3.14) < 10 && frontSensor.distance() < 20) {
+  if (abs(flameSense->flameAngle()*180/3.14) < 10 && frontSensor->distance() < 20) {
     drivetrain->drive(0, 0);
     digitalWrite(4, LOW);
     digitalWrite(5, LOW);
@@ -102,11 +111,11 @@ void loop() {
   } else {
     lcd.clear();
     lcd.println("Nothing\n");
-    wallFollow->followRightWall();
+    wallFollow->followRightWall(6.5);
   }
   Serial.print("Flame sensor: \n");
   Serial.println(analogRead(0));
-  distSpeed = .17*(frontSensor.distance()-20);
+  distSpeed = .17*(frontSensor->distance()-20);
   if (distSpeed > 6) {
     distSpeed = 6;
   }
