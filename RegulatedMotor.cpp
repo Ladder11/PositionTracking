@@ -25,13 +25,17 @@ void RegulatedMotor::initialize() {
  * @param float The rotational speed to move the motor at, uses a simple P controller
 **/
 void RegulatedMotor::setRPM(float rpms) {
-	arpm = getRPM();
-	//Serial.println(arpm);
-	newOut = out + 0.001*(rpms-arpm);
-	//Serial.println(newOut);
-	//Serial.println(newOut);
-	out = constrain(newOut, -1.0, 1.0);
-	_motor->setOutput(out);
+	if (rpms != 0.0) {
+		arpm = getRPM();
+		//Serial.println(arpm);
+		newOut = out + 0.005*(rpms-arpm);
+		//Serial.println(newOut);
+		//Serial.println(newOut);
+		out = constrain(newOut, -1.0, 1.0);
+		_motor->setOutput(out);
+	} else {
+		_motor->setOutput(0.0);
+	}
 }
 
 /**
