@@ -68,11 +68,7 @@ void setup()
 
 void loop() {
   if (abs(flameSense->flameAngle()*180/3.14) < 10 && frontSensor->distance() < 20) {
-    drivetrain->drive(0, 0);
-    digitalWrite(4, LOW);
-    digitalWrite(5, LOW);
-    digitalWrite(6, LOW);
-    digitalWrite(7, LOW);
+    drivetrain->stop();
     prop.attach(11, 1000, 2000);
     prop.write(180);
     delay(40);
@@ -107,19 +103,17 @@ void loop() {
     lcd.setCursor(0, 1);
     lcd.print("Z: ");
     lcd.print(flameSense->flameHeight(frontSensor));
+    distSpeed = .25*(frontSensor->distance()-20);
+    if (distSpeed > 6) {
+      distSpeed = 6;
+    }
     drivetrain->drive(distSpeed, flameSense->flameAngle()*180/3.1415*4); //-.01*(800-flameSense->flameDistance())
   } else {
     lcd.clear();
-    lcd.println("Nothing\n");
-    wallFollow->followRightWall(6.5);
+    lcd.setCursor(0,0);
+    lcd.print("Nothing\n");
+    lcd.setCursor(0,1);
+    lcd.print(rightSensor->distance());
+    wallFollow->followRightWall(8.0);
   }
-  Serial.print("Flame sensor: \n");
-  Serial.println(analogRead(0));
-  distSpeed = .17*(frontSensor->distance()-20);
-  if (distSpeed > 6) {
-    distSpeed = 6;
-  }
-  
-  drivetrain->updateRobotPos();
-
 }
